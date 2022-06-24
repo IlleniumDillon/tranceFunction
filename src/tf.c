@@ -2,7 +2,7 @@
  * @Author: IlleniumDillon 147900130@qq.com
  * @Date: 2022-06-23 18:07:16
  * @LastEditors: IlleniumDillon 147900130@qq.com
- * @LastEditTime: 2022-06-24 19:21:34
+ * @LastEditTime: 2022-06-24 19:46:37
  * @FilePath: \transfunction\src\tf.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -198,4 +198,12 @@ float tf_update(tf_function_t* ptr,float input)
     }
     ptr->lastoutputs[0] = output;
     return output;
+}
+
+void tf_deinit(tf_function_t* ptr)
+{
+    free(ptr->inputgain);
+    free(ptr->lastinputs);
+    free(ptr->lastoutputs);
+    free(ptr->outputgain);
 }
