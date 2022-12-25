@@ -2,7 +2,7 @@
  * @Author: IlleniumDillon 147900130@qq.com
  * @Date: 2022-06-23 18:07:08
  * @LastEditors: IlleniumDillon 147900130@qq.com
- * @LastEditTime: 2022-06-24 19:46:34
+ * @LastEditTime: 2022-12-25 14:25:14
  * @FilePath: \transfunction\include\tf.h
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -25,6 +25,9 @@ typedef struct tf_function
     float* outputgain;
     uint8_t lastinputsnum;
     uint8_t lastoutputsnum;
+    uint8_t havelimit;
+    float floor;
+    float ceiling;
 }tf_function_t;
 
 /**
@@ -93,5 +96,14 @@ float tf_update(tf_function_t* ptr,float input);
  * @return {*}
  */
 void tf_deinit(tf_function_t* ptr);
+
+/**
+ * @description: 设置限幅
+ * @param {tf_function_t*} ptr 传递函数结构体指针
+ * @param {float} floor 下限
+ * @param {float} ceiling 上限
+ * @return {*}
+ */
+void th_setLimit(tf_function_t* ptr, float floor, float ceiling);
 
 #endif

@@ -2,7 +2,7 @@
  * @Author: IlleniumDillon 147900130@qq.com
  * @Date: 2022-06-23 18:07:16
  * @LastEditors: IlleniumDillon 147900130@qq.com
- * @LastEditTime: 2022-06-24 19:46:37
+ * @LastEditTime: 2022-12-25 14:33:25
  * @FilePath: \transfunction\src\tf.c
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -145,6 +145,7 @@ void tf_initZFunction_ND(tf_function_t* ptr,float* num,uint8_t num_num,float* de
         ptr->outputgain[i] = - den[i+1] / den[0];
         ptr->lastoutputs[i] = 0;
     }
+    ptr->havelimit = 0;
     //ptr->lastoutputs[0] = 0;
 }
 
@@ -172,6 +173,7 @@ void tf_initZFunction_ZP(tf_function_t* ptr,float* zeros,uint8_t zeros_num,float
         ptr->outputgain[i] = - den[i+1] / den[0];
         ptr->lastoutputs[i] = 0;
     }
+    ptr->havelimit = 0;
     free(num);
     free(den);
 }
@@ -192,6 +194,11 @@ float tf_update(tf_function_t* ptr,float input)
     {
         output += ptr->outputgain[i] * ptr->lastoutputs[i];
     }
+    if(ptr->havelimit)
+    {
+        if(output < ptr->floor) output = ptr->floor;
+        if(output > ptr->ceiling) output = ptr->ceiling;
+    }
     for(int i = ptr->lastoutputsnum; i > 0; i--)
     {
         ptr->lastoutputs[i] = ptr->lastoutputs[i-1];
@@ -206,4 +213,11 @@ void tf_deinit(tf_function_t* ptr)
     free(ptr->lastinputs);
     free(ptr->lastoutputs);
     free(ptr->outputgain);
+}
+
+void th_setLimit(tf_function_t* ptr, float floor, float ceiling)
+{
+    ptr->havelimit = 1;
+    ptr->floor = floor;
+    ptr->ceiling = ceiling;
 }
